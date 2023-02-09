@@ -1,6 +1,6 @@
-import { AiFillPicture  } from 'react-icons/ai'
-import { TbSocial } from 'react-icons/tb'
-import { TiVideo } from 'react-icons/ti'
+import { AiFillPicture } from "react-icons/ai";
+import { TbSocial } from "react-icons/tb";
+import { TiVideo } from "react-icons/ti";
 
 export const MENU_LINKS = [
   {
@@ -24,38 +24,33 @@ export const MENU_LINKS = [
 ];
 
 export const wordCount = (data) => {
-  console.log("data", data);
   let words = [];
   for (const el of data) {
     let regex = /[A-Za-z]/g;
     if (typeof el?.insert === "string" && typeof el?.insert !== "object") {
       let word = el?.insert.match(regex);
-      console.log("word", word);
       if (word === null) {
         words.push(0);
-      } else if (word?.join('').includes("https")) {
+      } else if (word?.join("").includes("https")) {
         words.push(1);
       } else {
         words.push(word?.length);
       }
     }
   }
-  console.log("words", words);
   let totalWordLength = words.reduce((acc, cur) => acc + cur, 0);
-  console.log("word length: " + totalWordLength);
   return totalWordLength;
 };
 
 /**
- * 
- * @param {String} type 
- * @param {Object} quill 
- * @param {String} url 
+ *
+ * @param {String} type
+ * @param {Object} quill
+ * @param {String} url
  */
 
 export const handleEmbed = (type, quill, url) => {
   let range = quill?.getSelection(true);
-  console.log("range", range);
 
   quill?.insertText(range?.index, "\n", "user");
   type === "link"
@@ -80,3 +75,16 @@ export const readFileToDataUrl = (file) =>
     reader.addEventListener("load", () => resolve(reader.result), false);
     reader.readAsDataURL(file);
   });
+
+/**
+ *
+ * @param {String} url
+ * @returns {String} Embed URL
+ */
+export const formatUrl = (url) => {
+  const urlId = url?.includes("https://youtu.be")
+    ? url?.substring(17, 28)
+    : url?.substring(32, 43);
+  const embedUrl = `https://www.youtube.com/embed/${urlId}`;
+  return embedUrl;
+};

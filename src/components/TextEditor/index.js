@@ -7,7 +7,7 @@ import { wordCount } from "components/constants";
 
 export const TOOLBAR_OPTIONS = [
   [{ header: [1, 2, false] }],
-  ["link", "image"],
+  ["link", "image", "video"],
   [{ align: [] }],
   ["bold", "italic"],
   [{ list: "ordered" }, { list: "bullet" }, "blockquote"],
@@ -17,20 +17,23 @@ export const TextEditor = () => {
   const { addToState, totalWordCount } = useAppState();
   const [quill, setQuill] = useState();
 
-  const wrapperRef = useCallback((wrapper) => {
-    if (wrapper === null) return;
+  const wrapperRef = useCallback(
+    (wrapper) => {
+      if (wrapper === null) return;
 
-    wrapper.innerHTML = "";
-    const editor = document.createElement("div");
-    wrapper.append(editor);
-    const q = new Quill(editor, {
-      theme: "snow",
-      modules: { toolbar: TOOLBAR_OPTIONS },
-      placeholder: "Add content",
-    });
-    setQuill(q);
-    addToState(q);
-  }, [addToState]);
+      wrapper.innerHTML = "";
+      const editor = document.createElement("div");
+      wrapper.append(editor);
+      const q = new Quill(editor, {
+        theme: "snow",
+        modules: { toolbar: TOOLBAR_OPTIONS },
+        placeholder: "Add content",
+      });
+      setQuill(q);
+      addToState(q);
+    },
+    [addToState]
+  );
 
   useEffect(() => {
     const handler = (delta, oldDelta, source) => {
@@ -45,7 +48,5 @@ export const TextEditor = () => {
     };
   }, [quill, totalWordCount]);
 
-  return (
-    <div id="container" ref={wrapperRef}></div>
-  );
+  return <div id="container" ref={wrapperRef}></div>;
 };

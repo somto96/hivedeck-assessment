@@ -15,7 +15,7 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { useAppState } from "utils/context/AppContext";
-import { handleEmbed } from "components/constants";
+import { handleEmbed, formatUrl } from "components/constants";
 
 export const VideoModal = ({ isOpen, onClose }) => {
   const videoProvider = useRef();
@@ -28,7 +28,9 @@ export const VideoModal = ({ isOpen, onClose }) => {
       platform: videoProvider.current?.value,
       url: url.current?.value,
     };
-    handleEmbed("video", quill, data?.url);
+
+    const embedUrl = formatUrl(data?.url);
+    handleEmbed("video", quill, embedUrl);
     onClose();
   };
   return (
@@ -48,8 +50,16 @@ export const VideoModal = ({ isOpen, onClose }) => {
                 <FormLabel fontSize={"10px"} color="#333333">
                   VIDEO PROVIDER
                 </FormLabel>
-                <Select placeholder="Please select" ref={videoProvider} color={"#343E37"} bg={"#FAFAFA"} fontSize={"12px"} >
-                  <option color={"#343E37"} fontSize={"12px"}>Youtube</option>
+                <Select
+                  placeholder="Please select"
+                  ref={videoProvider}
+                  color={"#343E37"}
+                  bg={"#FAFAFA"}
+                  fontSize={"12px"}
+                >
+                  <option color={"#343E37"} fontSize={"12px"}>
+                    Youtube
+                  </option>
                 </Select>
               </FormControl>
 
@@ -57,7 +67,13 @@ export const VideoModal = ({ isOpen, onClose }) => {
                 <FormLabel fontSize={"10px"} color="#333333">
                   URL
                 </FormLabel>
-                <Input type="text" ref={url} bg={"#FAFAFA"} color={"#343E37"} fontSize={"12px"} />
+                <Input
+                  type="text"
+                  ref={url}
+                  bg={"#FAFAFA"}
+                  color={"#343E37"}
+                  fontSize={"12px"}
+                />
               </FormControl>
             </Flex>
           </ModalBody>
