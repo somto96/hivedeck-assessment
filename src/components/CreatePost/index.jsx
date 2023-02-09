@@ -31,7 +31,6 @@ export const CreatePost = () => {
   const headerRef = useRef();
   const [modalType, setModalType] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [value, setValue] = useState("");
 
   const handleShowModal = (type) => {
     if (type === "Picture") {
@@ -87,7 +86,7 @@ export const CreatePost = () => {
                 }}
                 ref={headerRef}
               />
-              <TextEditor value={value} onChange={setValue} />
+              <TextEditor />
 
               <Flex alignItems={"center"} justifyContent={"flex-start"}>
                 <Menu>
