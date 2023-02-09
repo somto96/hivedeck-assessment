@@ -7,7 +7,7 @@ import { wordCount } from "components/constants";
 
 export const TOOLBAR_OPTIONS = [
   [{ header: [1, 2, false] }],
-  ["link", "image", "video"],
+  ["link", "image"],
   [{ align: [] }],
   ["bold", "italic"],
   [{ list: "ordered" }, { list: "bullet" }, "blockquote"],
