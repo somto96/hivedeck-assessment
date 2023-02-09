@@ -15,7 +15,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { readFileToDataUrl } from "components/constants";
-import { EditorState, Modifier } from "draft-js";
+import { useAppState } from "utils/context/AppContext";
 
 export const ImageUpload = forwardRef(
   ({
@@ -24,21 +24,21 @@ export const ImageUpload = forwardRef(
     onFile,
     loading,
     trim = true,
-    editorState,
-    onChange,
+    handleEmbed,
     removeImage = () => {},
   }) => {
     const [currentImage, setCurrentImage] = useState(null);
     const [file, setFile] = useState(null);
     const choosePicture = useRef(null);
+    const { addImageUploadUrl } = useAppState();
 
     const handleFileSelectionChange = async (event) => {
       const file = event?.target?.files?.[0];
       setFile(file);
-      console.log("file", file);
 
       const fileData = await readFileToDataUrl(file);
       setCurrentImage(fileData);
+      addImageUploadUrl(fileData);
 
       const base64String = fileData.split(",")[1];
 
@@ -59,20 +59,8 @@ export const ImageUpload = forwardRef(
       event.target.value = "";
     };
 
-    const handleModalClose = () => {
-        console.log("HEllo");
-      const contentState = Modifier.insertText(
-        editorState?.getCurrentContent(),
-        editorState?.getSelection(),
-        currentImage,
-        editorState?.getCurrentInlineStyle()
-      );
-      console.log("test", contentState);
-      onChange(
-        EditorState.push(editorState, contentState, "insert-characters")
-      );
-      onClose();
-    };
+    const buttonText =
+      currentImage !== null ? "Remove Image" : "Import Image from Device";
 
     return (
       <>
@@ -114,11 +102,7 @@ export const ImageUpload = forwardRef(
                           : () => choosePicture.current.click()
                       }
                     >
-                      {loading
-                        ? "Uploading"
-                        : currentImage !== null
-                        ? "Remove Image"
-                        : "Import Image from Device"}
+                      {loading ? "Uploading" : buttonText}
                     </Button>
                     {currentImage && (
                       <Text fontSize="10px" color="#333333">
@@ -143,13 +127,18 @@ export const ImageUpload = forwardRef(
             <ModalFooter justifyContent={"flex-start"}>
               <Button
                 bg="#0A7227"
+                fontSize={"14px"}
                 color="white"
                 mr={3}
-                onClick={handleModalClose}
+                onClick={handleEmbed}
+                _hover={{
+                  background: "#0A7227",
+                  opacity: "0.8",
+                }}
               >
                 Embed
               </Button>
-              <Button variant="ghost" onClick={onClose}>
+              <Button variant="ghost" fontSize={"14px"} onClick={onClose}>
                 Cancel
               </Button>
             </ModalFooter>

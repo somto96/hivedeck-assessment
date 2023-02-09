@@ -14,10 +14,13 @@ import {
   Select,
   Input,
 } from "@chakra-ui/react";
+import { useAppState } from "utils/context/AppContext";
+import { handleEmbed } from "components/constants";
 
 export const VideoModal = ({ isOpen, onClose }) => {
   const videoProvider = useRef();
   const url = useRef();
+  const { quill } = useAppState();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,7 +28,7 @@ export const VideoModal = ({ isOpen, onClose }) => {
       platform: videoProvider.current?.value,
       url: url.current?.value,
     };
-    console.log("data", data);
+    handleEmbed("video", quill, data?.url);
     onClose();
   };
   return (
@@ -42,24 +45,38 @@ export const VideoModal = ({ isOpen, onClose }) => {
               gap={5}
             >
               <FormControl>
-                <FormLabel fontSize={"10px"} color="#333333">VIDEO PROVIDER</FormLabel>
-                <Select placeholder="Please select" ref={videoProvider}>
-                  <option>Youtube</option>
+                <FormLabel fontSize={"10px"} color="#333333">
+                  VIDEO PROVIDER
+                </FormLabel>
+                <Select placeholder="Please select" ref={videoProvider} color={"#343E37"} bg={"#FAFAFA"} fontSize={"12px"} >
+                  <option color={"#343E37"} fontSize={"12px"}>Youtube</option>
                 </Select>
               </FormControl>
 
               <FormControl>
-                <FormLabel fontSize={"10px"} color="#333333">URL</FormLabel>
-                <Input type="text" ref={url} />
+                <FormLabel fontSize={"10px"} color="#333333">
+                  URL
+                </FormLabel>
+                <Input type="text" ref={url} bg={"#FAFAFA"} color={"#343E37"} fontSize={"12px"} />
               </FormControl>
             </Flex>
           </ModalBody>
 
           <ModalFooter justifyContent={"flex-start"}>
-            <Button bg="#0A7227" color="white" mr={3} onClick={handleSubmit}>
+            <Button
+              bg="#0A7227"
+              color="white"
+              fontSize={"14px"}
+              mr={3}
+              _hover={{
+                background: "#0A7227",
+                opacity: "0.8",
+              }}
+              onClick={handleSubmit}
+            >
               Embed
             </Button>
-            <Button variant="ghost" onClick={onClose}>
+            <Button variant="ghost" fontSize={"14px"} onClick={onClose}>
               Cancel
             </Button>
           </ModalFooter>

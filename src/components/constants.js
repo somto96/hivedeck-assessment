@@ -1,111 +1,71 @@
+import { AiFillPicture  } from 'react-icons/ai'
+import { TbSocial } from 'react-icons/tb'
+import { TiVideo } from 'react-icons/ti'
+
 export const MENU_LINKS = [
   {
     id: 1,
     name: "Picture",
+    Icon: AiFillPicture,
     subtitles: "jpeg, png",
   },
   {
     id: 2,
     name: "Video",
-    subtitles: "JW player, Youtube, Vimeo",
+    Icon: TiVideo,
+    subtitles: "Embed a YouTube video",
   },
   {
     id: 3,
     name: "Social",
-    subtitles: "Instagram, Twitter, TikTok, Snapchat, Facebook",
+    Icon: TbSocial,
+    subtitles: "Embed a Facebook link",
   },
 ];
 
 export const wordCount = (data) => {
+  console.log("data", data);
   let words = [];
   for (const el of data) {
-    words.push(el?.text.length);
+    let regex = /[A-Za-z]/g;
+    if (typeof el?.insert === "string" && typeof el?.insert !== "object") {
+      let word = el?.insert.match(regex);
+      console.log("word", word);
+      if (word === null) {
+        words.push(0);
+      } else if (word?.join('').includes("https")) {
+        words.push(1);
+      } else {
+        words.push(word?.length);
+      }
+    }
   }
+  console.log("words", words);
   let totalWordLength = words.reduce((acc, cur) => acc + cur, 0);
+  console.log("word length: " + totalWordLength);
   return totalWordLength;
 };
 
-export const TOOLBAR_OPTIONS = {
-  options: [
-    "inline",
-    "blockType",
-    "fontSize",
-    "fontFamily",
-    "list",
-    "textAlign",
-    "link",
-    "image",
-    "history",
-  ],
+/**
+ * 
+ * @param {String} type 
+ * @param {Object} quill 
+ * @param {String} url 
+ */
 
-  blockType: {
-    inDropdown: true,
-    options: [
-      "Normal",
-      "H1",
-      "H2",
-      "H3",
-      "H4",
-      "H5",
-      "H6",
-      "Blockquote",
-      "Code",
-    ],
-    className: undefined,
-    component: undefined,
-    dropdownClassName: undefined,
-  },
-  fontSize: {
-    // icon: fontSize,
-    inDropdown: true,
-    options: [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96],
-    className: undefined,
-    component: undefined,
-    dropdownClassName: undefined,
-  },
-  fontFamily: {
-    inDropdown: true,
-    options: [
-      "Arial",
-      "Georgia",
-      "Impact",
-      "Tahoma",
-      "Times New Roman",
-      "Verdana",
-    ],
-    className: undefined,
-    component: undefined,
-    dropdownClassName: undefined,
-  },
+export const handleEmbed = (type, quill, url) => {
+  let range = quill?.getSelection(true);
+  console.log("range", range);
 
-  link: {
-    inDropdown: false,
-    className: undefined,
-    component: undefined,
-    popupClassName: undefined,
-    dropdownClassName: undefined,
-    showOpenOptionOnHover: true,
-    defaultTargetOption: "_blank",
-    options: ["link"],
-    linkCallback: undefined,
-  },
-
-  image: {
-    className: undefined,
-    component: undefined,
-    popupClassName: undefined,
-    urlEnabled: true,
-    uploadEnabled: true,
-    alignmentEnabled: true,
-    uploadCallback: undefined,
-    previewImage: true,
-    inputAccept: "image/gif,image/jpeg,image/jpg,image/png,image/svg",
-    alt: { present: true, mandatory: false },
-    defaultSize: {
-      height: "auto",
-      width: "auto",
-    },
-  },
+  quill?.insertText(range?.index, "\n", "user");
+  type === "link"
+    ? quill?.insertText(range?.index + 1, url, "link", url)
+    : quill?.insertEmbed(
+        range?.index + 1,
+        `${type === "image" ? "image" : "video"}`,
+        url
+      );
+  quill?.setSelection(range?.index + 2, "silent");
 };
 
 /**
@@ -120,8 +80,3 @@ export const readFileToDataUrl = (file) =>
     reader.addEventListener("load", () => resolve(reader.result), false);
     reader.readAsDataURL(file);
   });
-
-
-export const SOCIAL_LINKS_INPUT_FIELDS = [
-
-]

@@ -13,16 +13,16 @@ import {
   FormLabel,
   Select,
   Switch,
-  Text,
   Input,
-  Box,
-  Center,
 } from "@chakra-ui/react";
+import { useAppState } from "utils/context/AppContext";
+import { handleEmbed } from "components/constants";
 
 export const SocialModal = ({ isOpen, onClose }) => {
   const socialMediaPlatform = useRef();
   const url = useRef();
   const code = useRef();
+  const { quill } = useAppState();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -31,7 +31,7 @@ export const SocialModal = ({ isOpen, onClose }) => {
       url: url.current?.value,
       code: code.current?.value,
     };
-    console.log("data", data);
+    handleEmbed("link", quill, data?.url);
     onClose();
   };
   return (
@@ -51,8 +51,8 @@ export const SocialModal = ({ isOpen, onClose }) => {
                 <FormLabel fontSize={"10px"} color="#333333">
                   SOCIAL MEDIA PLATFORM
                 </FormLabel>
-                <Select placeholder="Please select" ref={socialMediaPlatform}>
-                  <option>Facebook</option>
+                <Select placeholder="Please select" ref={socialMediaPlatform} color={"#343E37"} bg={"#FAFAFA"} fontSize={"12px"}>
+                  <option color={"#343E37"} fontSize={"12px"} py={5}>Facebook</option>
                 </Select>
               </FormControl>
 
@@ -60,14 +60,14 @@ export const SocialModal = ({ isOpen, onClose }) => {
                 <FormLabel fontSize={"10px"} color="#333333">
                   URL
                 </FormLabel>
-                <Input type="text" ref={url} />
+                <Input type="text" ref={url} color={"#343E37"} bg={"#FAFAFA"} fontSize={"12px"} />
               </FormControl>
 
               <FormControl>
                 <FormLabel fontSize={"10px"} color="#333333">
                   CODE
                 </FormLabel>
-                <Input type="text" ref={code} />
+                <Input type="text" ref={code} color={"#343E37"} bg={"#FAFAFA"} fontSize={"12px"} />
               </FormControl>
 
               <FormControl
@@ -88,10 +88,20 @@ export const SocialModal = ({ isOpen, onClose }) => {
           </ModalBody>
 
           <ModalFooter justifyContent={"flex-start"}>
-            <Button bg="#0A7227" color="white" mr={3} onClick={handleSubmit}>
+            <Button
+              bg="#0A7227"
+              color="white"
+              fontSize={"14px"}
+              _hover={{
+                background: "#0A7227",
+                opacity: "0.8",
+              }}
+              mr={3}
+              onClick={handleSubmit}
+            >
               Embed
             </Button>
-            <Button variant="ghost" onClick={onClose}>
+            <Button variant="ghost" fontSize={"14px"} onClick={onClose}>
               Cancel
             </Button>
           </ModalFooter>
