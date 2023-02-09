@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
+import PropTypes from "prop-types";
 
 export const AppContext = createContext();
 const AppContextWrapper = ({ children }) => {
@@ -20,12 +21,9 @@ const AppContextWrapper = ({ children }) => {
     setImageUrl(payload);
   }, []);
 
-  const totalWordCount = useCallback(
-    (payload) => {
-      setWordCount(payload);
-    },
-    [],
-  )
+  const totalWordCount = useCallback((payload) => {
+    setWordCount(payload);
+  }, []);
 
   const data = useMemo(
     () => ({
@@ -35,11 +33,21 @@ const AppContextWrapper = ({ children }) => {
       wordCount,
       imageUrl,
       quill,
-      
     }),
     [addToState, addImageUploadUrl, totalWordCount, wordCount, imageUrl, quill]
   );
   return <AppContext.Provider value={data}>{children}</AppContext.Provider>;
+};
+
+AppContextWrapper.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.number,
+    PropTypes.string,
+    PropTypes.object,
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
 };
 
 export const useAppState = () => useContext(AppContext);

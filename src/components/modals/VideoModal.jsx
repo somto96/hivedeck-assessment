@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import PropTypes from "prop-types";
 import {
   Modal,
   ModalOverlay,
@@ -100,4 +101,9 @@ export const VideoModal = ({ isOpen, onClose }) => {
       </Modal>
     </>
   );
+};
+
+VideoModal.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
 };

@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import PropTypes from "prop-types";
 import {
   Modal,
   ModalOverlay,
@@ -109,4 +110,9 @@ export const SocialModal = ({ isOpen, onClose }) => {
       </Modal>
     </>
   );
+};
+
+SocialModal.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
 };

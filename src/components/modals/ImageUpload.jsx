@@ -1,4 +1,5 @@
 import React, { useRef, forwardRef, useState } from "react";
+import PropTypes from "prop-types";
 import {
   Modal,
   ModalOverlay,
@@ -21,9 +22,7 @@ export const ImageUpload = forwardRef(
   ({
     isOpen,
     onClose,
-    onFile,
     loading,
-    trim = true,
     handleEmbed,
     removeImage = () => {},
   }) => {
@@ -39,19 +38,10 @@ export const ImageUpload = forwardRef(
       const fileData = await readFileToDataUrl(file);
       setCurrentImage(fileData);
       addImageUploadUrl(fileData);
-
-      const base64String = fileData.split(",")[1];
-
-      if (trim) {
-        return onFile(base64String);
-      }
-
-      return onFile(fileData);
     };
 
     const handleRemove = () => {
       setCurrentImage(null);
-      onFile(null);
       removeImage(setCurrentImage);
     };
 
@@ -148,3 +138,13 @@ export const ImageUpload = forwardRef(
     );
   }
 );
+
+ImageUpload.propTypes = {
+  loading: PropTypes.bool,
+  isOpen: PropTypes.bool,
+  onFile: PropTypes.func,
+  removeImage: PropTypes.func,
+  onClose: PropTypes.func,
+  handleEmbed: PropTypes.func,
+  trim: PropTypes.bool,
+};
